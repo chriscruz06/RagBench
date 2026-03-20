@@ -1,0 +1,32 @@
+# Core RAG stack
+langchain>=0.2.0
+langchain-community>=0.2.0
+langchain-chroma>=0.1.0
+chromadb>=0.5.0
+sentence-transformers>=3.0.0
+
+# Document loading
+pypdf>=4.0.0
+unstructured>=0.14.0
+
+# API
+fastapi>=0.111.0
+uvicorn>=0.30.0
+python-multipart>=0.0.9
+
+# LLM backends
+ollama>=0.2.0
+# openai>=1.30.0  # uncomment if using OpenAI
+
+# Eval
+ragas>=0.1.10
+pandas>=2.2.0
+plotly>=5.22.0
+rouge-score>=0.1.2
+nltk>=3.8.0
+
+# Utils
+python-dotenv>=1.0.0
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+rich>=13.7.0  # nice terminal output
