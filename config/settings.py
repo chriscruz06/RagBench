@@ -1,5 +1,5 @@
 """
-RagBench configuration — all knobs in one place.
+RagBench configuration - all knobs in one place.
 """
 
 from pydantic_settings import BaseSettings
@@ -24,8 +24,16 @@ class Settings(BaseSettings):
     chunk_overlap: int = 64
 
     # ── Retrieval ─────────────────────────────────────────
-    top_k: int = 5
-    similarity_threshold: float = 0.3  # below this → abstain
+    top_k: int = 5  # final number of chunks sent to generation
+    retrieval_top_k: int = 20  # candidates pulled from vector store before reranking
+    similarity_threshold: float = 0.3  # below this → abstain (for embedding scores)
+
+    # ── Reranker ──────────────────────────────────────────
+    use_reranker: bool = True
+    reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"  # fast, good quality
+    # upgrade path: "cross-encoder/ms-marco-MiniLM-L-12-v2" for better quality
+    # or "BAAI/bge-reranker-base" for even better
+    reranker_threshold: float = -2.0  # cross-encoder scores range ~[-10, 10]; -2 filters clear misses
 
     # ── LLM ───────────────────────────────────────────────
     llm_provider: str = "ollama"  # "ollama" | "openai"

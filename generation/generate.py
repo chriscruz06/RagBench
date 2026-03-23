@@ -1,5 +1,5 @@
 """
-Generation — take retrieved chunks + user query, produce a grounded answer.
+Generation - take retrieved chunks + user query, produce a grounded answer.
 
 This module enforces the "curator, not theologian" principle:
 - System prompt constrains the LLM to only use retrieved context
@@ -15,27 +15,33 @@ from config.settings import settings
 # This is "Layer 1" of the hallucination defense. The prompt is designed
 # to make the LLM a careful curator of retrieved content, not a freelance
 # theologian.
+#
+# The prompt is structured to work well with smaller models like Mistral 7B:
+# - Numbered rules are easier for small models to follow than prose
+# - Explicit "DO" and "DO NOT" framing reduces ambiguity
+# - The output format section gives the model a clear template
 
 SYSTEM_PROMPT = """\
-You are a Catholic theological study assistant. Your SOLE purpose is to help \
-users understand Catholic teaching by presenting and organizing content retrieved \
-from the Catechism of the Catholic Church (CCC) and Sacred Scripture.
+You are a Catholic theological study assistant. You answer questions using ONLY \
+the retrieved passages provided in the user message. You are a curator of these \
+texts, not a theologian; let the documents speak.
 
-STRICT RULES:
-1. Answer ONLY based on the retrieved passages provided below. Do not use any \
-   knowledge beyond what is in the provided context.
-2. Every claim must cite a specific source: use "CCC §[number]" for Catechism \
-   paragraphs and standard verse notation (e.g., "Romans 5:8") for Scripture.
-3. If the retrieved passages do not contain sufficient information to answer \
-   the question, say: "The retrieved sources do not directly address this \
-   question. You may want to consult [suggest relevant CCC section or \
-   Scripture book]."
-4. Do NOT synthesize, speculate, or interpolate beyond what the sources state.
-5. Do NOT offer personal theological opinions or interpretations.
-6. Present the teaching as the sources present it — faithfully and accurately.
-7. When sources contain cross-references, mention them to help the user study further.
+RULES:
+1. Use ONLY information from the RETRIEVED CONTEXT below. Do not add outside knowledge.
+2. Cite every claim with its source: "CCC §[number]" for Catechism, standard verse \
+   notation (e.g., "Romans 5:8") for Scripture.
+3. When multiple retrieved passages address the question, SYNTHESIZE them into a \
+   coherent answer. Connect related teachings across sources.
+4. If a passage contains a cross-reference to another CCC paragraph or Scripture \
+   verse, mention it to help the user study further.
+5. If the retrieved passages do not contain enough information, say so clearly and \
+   suggest which CCC sections or Scripture books might help.
+6. Do NOT offer personal opinions, speculate, or interpret beyond what the sources state.
 
-You are a curator of these texts, not a theologian. Let the documents speak.\
+OUTPUT FORMAT:
+- Start with a direct answer to the question (1-2 sentences).
+- Then provide supporting detail from the sources with citations.
+- End with any relevant cross-references for further study.\
 """
 
 
@@ -49,13 +55,26 @@ def format_context(chunks: list[RetrievedChunk]) -> str:
         source = chunk.metadata.get("source", "Unknown")
         doc_type = chunk.metadata.get("doc_type", "")
         ref = chunk.metadata.get("reference", "")
+        para_num = chunk.metadata.get("paragraph_number", "")
 
-        header = f"[Source {i}: {doc_type.upper()}"
+        # Build a clear header so the LLM knows how to cite this chunk
+        header_parts = [f"Source {i}"]
+        if doc_type:
+            header_parts.append(doc_type.upper())
         if ref:
-            header += f" — {ref}"
-        header += f" | from {source} | relevance: {chunk.score:.2f}]"
+            header_parts.append(ref)
+        elif para_num:
+            header_parts.append(f"CCC §{para_num}")
+        header_parts.append(f"from {source}")
 
-        context_parts.append(f"{header}\n{chunk.text}")
+        # Include score info so the LLM can weight sources
+        if chunk.rerank_score is not None:
+            header_parts.append(f"relevance: {chunk.rerank_score:.2f}")
+        else:
+            header_parts.append(f"relevance: {chunk.score:.2f}")
+
+        header = " | ".join(header_parts)
+        context_parts.append(f"[{header}]\n{chunk.text}")
 
     return "\n\n---\n\n".join(context_parts)
 
@@ -71,7 +90,8 @@ RETRIEVED CONTEXT:
 USER QUESTION:
 {query}
 
-Provide a clear, well-cited answer based ONLY on the retrieved context above.\
+Using ONLY the retrieved context above, provide a clear answer with specific citations \
+(CCC § numbers and Scripture verses). If multiple sources are relevant, synthesize them.\
 """
 
 
@@ -84,10 +104,10 @@ def generate(
 
     Returns:
         {
-            "answer": str,          — the generated response
-            "chunks_used": int,     — number of chunks in context
-            "abstained": bool,      — True if context was insufficient
-            "sources": list[dict],  — metadata of chunks used
+            "answer": str,          - the generated response
+            "chunks_used": int,     - number of chunks in context
+            "abstained": bool,      - True if context was insufficient
+            "sources": list[dict],  - metadata of chunks used
         }
     """
     # ── Abstention check (Layer 4) ───────────────────────────
