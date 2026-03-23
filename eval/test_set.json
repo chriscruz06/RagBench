@@ -1,0 +1,62 @@
+[
+    {
+        "question": "What is Baptism?",
+        "expected_answer": "Baptism is the sacrament of regeneration and initiation into the Church, through which sins are forgiven and one becomes a new creature in Christ.",
+        "expected_sources": ["CCC §1213", "CCC §1265", "Romans 6:3-4"],
+        "topic": "sacraments"
+    },
+    {
+        "question": "What is the Holy Trinity?",
+        "expected_answer": "The Trinity is the central mystery of the Christian faith: one God in three persons (Father, Son, and Holy Spirit) distinct but inseparable, equal in majesty.",
+        "expected_sources": ["CCC §234", "CCC §253", "CCC §261"],
+        "topic": "creed"
+    },
+    {
+        "question": "What is the Eucharist?",
+        "expected_answer": "The Eucharist is the sacrament in which, under the appearances of bread and wine, the Body and Blood of Christ are truly, really, and substantially present.",
+        "expected_sources": ["CCC §1374", "CCC §1376", "1 Corinthians 11:23-26"],
+        "topic": "sacraments"
+    },
+    {
+        "question": "What are the Ten Commandments?",
+        "expected_answer": "The Ten Commandments are the moral law given by God to Moses on Mount Sinai, summarizing human duties toward God and neighbor.",
+        "expected_sources": ["CCC §2056", "CCC §2058", "Exodus 20:1-17"],
+        "topic": "morality"
+    },
+    {
+        "question": "What is Original Sin?",
+        "expected_answer": "Original Sin is the sin inherited from Adam and Eve by all human beings, depriving them of original holiness and justice, and inclining human nature toward evil.",
+        "expected_sources": ["CCC §396", "CCC §404", "CCC §405", "Romans 5:12"],
+        "topic": "creed"
+    },
+    {
+        "question": "What is the role of the Blessed Virgin Mary?",
+        "expected_answer": "Mary is the Mother of God, conceived without sin, who cooperated in the work of salvation through her faith and obedience, and who intercedes for the faithful.",
+        "expected_sources": ["CCC §484", "CCC §490", "CCC §494", "Luke 1:38"],
+        "topic": "creed"
+    },
+    {
+        "question": "What is the Sacrament of Reconciliation?",
+        "expected_answer": "Reconciliation (Confession) is the sacrament by which sins committed after Baptism are forgiven through the absolution of a priest, requiring contrition, confession, and satisfaction.",
+        "expected_sources": ["CCC §1422", "CCC §1424", "CCC §1491"],
+        "topic": "sacraments"
+    },
+    {
+        "question": "What does the Church teach about prayer?",
+        "expected_answer": "Prayer is the raising of the mind and heart to God, a vital and personal relationship with the living God. The Our Father is the summary of the whole Gospel and the most perfect prayer.",
+        "expected_sources": ["CCC §2559", "CCC §2590", "CCC §2761"],
+        "topic": "prayer"
+    },
+    {
+        "question": "What happens after death?",
+        "expected_answer": "After death, each soul undergoes particular judgment. The righteous may enter heaven directly or through purification in purgatory, while those who die in mortal sin descend to hell.",
+        "expected_sources": ["CCC §1021", "CCC §1022", "CCC §1030", "CCC §1033"],
+        "topic": "eschatology"
+    },
+    {
+        "question": "What is the Church?",
+        "expected_answer": "The Church is the Body of Christ, the People of God, founded by Christ on the Apostles, guided by the Holy Spirit, and entrusted with the mission of proclaiming the Gospel to all nations.",
+        "expected_sources": ["CCC §748", "CCC §751", "CCC §763", "Matthew 16:18"],
+        "topic": "ecclesiology"
+    }
+]
