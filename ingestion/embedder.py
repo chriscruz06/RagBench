@@ -1,5 +1,5 @@
 """
-Embedding and vector store — embed chunks and persist to ChromaDB.
+Embedding and vector store - embed chunks and persist to ChromaDB.
 """
 
 from pathlib import Path
@@ -18,7 +18,7 @@ def store_chunks(chunks: list[Document], collection_name: str = "ragbench") -> N
     Embed chunks and store them in ChromaDB.
 
     Each chunk gets a deterministic ID based on source + chunk index
-    so re-ingestion is idempotent (won't create duplicates).
+    so re-ingestion is idempotent (won't create duplicates, big words I know).
     """
     import chromadb
 
