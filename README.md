@@ -15,18 +15,18 @@ The system is designed around a core principle: **the LLM is a curator, not a th
 │                  │     │  Chunk → Embed   │     │   (cosine)      │
 └─────────────────┘     └──────────────────┘     └────────┬────────┘
                                                           │
-                                                          │ retrieve top-K
-                                                          │ + threshold filter
+                                                          │ retrieve top-50
+                                                          │ + cross-encoder rerank
 ┌─────────────────┐     ┌──────────────────┐     ┌────────▼────────┐
 │   Answer +       │◀────│   Generation     │◀────│   Retrieval     │
-│   CCC §1234      │     │   System prompt  │     │   Similarity    │
-│   Romans 5:8     │     │   guardrails     │     │   scoring       │
-└────────┬────────┘     └──────────────────┘     └─────────────────┘
-         │
+│   CCC §1234      │     │   System prompt  │     │   Two-stage:    │
+│   Romans 5:8     │     │   guardrails     │     │   bi-encoder +  │
+└────────┬────────┘     └──────────────────┘     │   cross-encoder │
+         │                                        └─────────────────┘
          ▼
 ┌──────────────────┐
-│   Eval Framework  │  Precision@K · Recall@K · MRR · Faithfulness
-│   (Phase 2)       │  Answer Relevance · BLEU · ROUGE · F1
+│   Eval Framework  │  Precision@K · Recall@K · MRR · Token F1
+│                   │  BLEU · ROUGE-L · Source Coverage
 └──────────────────┘
 ```
 
@@ -78,6 +78,11 @@ python pipeline.py ingest
 
 # 7. Query
 python pipeline.py
+
+# 8. Evaluate
+python -m eval.runner --tag baseline           # full eval (needs Ollama)
+python -m eval.runner --retrieval-only --tag baseline  # retrieval only (fast)
+python -m eval.runner --dry-run                # test the harness
 ```
 
 ## Project Structure
@@ -91,29 +96,35 @@ ragbench/
 │   ├── preprocess_bible.py # Gutenberg cleanup → per-book text files
 │   └── preprocess_ccc.py   # CCC parser → numbered paragraphs with scripture refs
 ├── retrieval/
-│   └── search.py           # Vector search with similarity threshold abstention
+│   └── search.py           # Two-stage retrieval: bi-encoder → cross-encoder rerank
 ├── generation/
 │   └── generate.py         # LLM prompting with faithfulness guardrails
-├── eval/                   # Metrics, test sets, scoring pipeline (Phase 2)
+├── eval/                   # Evaluation framework
+│   ├── metrics.py          # Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1
+│   ├── runner.py           # Test set runner with CLI, outputs timestamped JSON reports
+│   ├── test_metrics.py     # Unit tests for metrics (11 tests)
+│   ├── test_set.json       # 10 gold-standard Q&A pairs across 6 topics
+│   └── results/            # Timestamped eval reports (JSON)
 ├── api/
 │   └── app.py              # FastAPI backend
-├── frontend/               # Web UI
-├── notebooks/              # Ablation experiments (Phase 3)
 ├── config/
 │   └── settings.py         # Centralized config via Pydantic
 ├── data/
 │   ├── raw/                # Source documents (not tracked)
 │   └── processed/          # Cleaned + structured corpus (not tracked)
 ├── pipeline.py             # End-to-end orchestrator
+├── test_pipeline.py        # Smoke tests for each pipeline component
 ├── requirements.txt
 └── .env.example
 ```
 
 ## Key Design Decisions
 
-**Similarity threshold abstention**  If no retrieved chunk scores above the configured threshold (default: 0.3), the system declines to answer rather than hallucinating. This is a deliberate tradeoff: lower recall in exchange for higher faithfulness to the text (don't want to accidently recreate some ancient heresy).
+**Two-stage retrieval**  The retrieval pipeline uses a bi-encoder (BAAI/bge-base-en-v1.5) to pull 50 candidates from ChromaDB, then a cross-encoder (ms-marco-MiniLM-L-6-v2) reranks them by query relevance. This gives both speed (bi-encoder) and precision (cross-encoder). The reranker threshold filters out low-confidence chunks before they reach the LLM.
 
-**"Curator, not theologian" prompt design**  The system prompt constrains the LLM to organize and present retrieved content, not to synthesize or interpret independently. This is the primary defense against unfaithful generation - the model cites CCC paragraphs and Scripture, it doesn't do theology.
+**Similarity threshold abstention**  If no retrieved chunk scores above the configured threshold, the system declines to answer rather than hallucinating. This is a deliberate tradeoff: lower recall in exchange for higher faithfulness to the text (don't want to accidentally recreate some ancient heresy).
+
+**"Curator, not theologian" prompt design**  The system prompt constrains the LLM to organize and present retrieved content, not to synthesize or interpret independently. This is the primary defense against unfaithful generation — the model cites CCC paragraphs and Scripture, it doesn't do theology.
 
 **Citation enforcement**  Every claim in a response must reference a specific CCC paragraph (e.g., CCC §1234) or Scripture verse (e.g., Romans 5:8). Responses without citations indicate retrieval or generation failure.
 
@@ -129,33 +140,52 @@ ragbench/
 | 2 | Citation enforcement | Every claim must cite CCC § or Scripture |
 | 3 | Retrieval-heavy generation | Responses are mostly direct quotation with connective tissue |
 | 4 | Similarity threshold | Abstain when context is insufficient |
-| 5 | Eval framework | Faithfulness metric quantifies grounding (Phase 2) |
+| 5 | Eval framework | Faithfulness metrics quantify grounding |
+
+## Baseline Eval Results
+
+First full pipeline evaluation (10 questions, 6 topics):
+
+| Metric | Score | Notes |
+|--------|-------|-------|
+| **Retrieval** | | |
+| Precision@K | 0.140 | Strict match against gold-standard paragraphs |
+| Recall@K | 0.150 | Retrieval finds relevant content, often different §'s than gold set |
+| MRR | 0.270 | First gold-standard hit typically at rank 2–4 |
+| **Generation** | | |
+| BLEU | 0.035 | Expected low — Mistral paraphrases rather than echoing gold answers |
+| ROUGE-L F1 | 0.190 | Moderate subsequence overlap with expected answers |
+| Token F1 | 0.261 | ~26% keyword overlap, reasonable given different source paragraphs |
+| Source Coverage | 0.117 | Model cites retrieved paragraphs, not the specific gold-standard ones |
+
+These scores reflect a strict evaluation — the retriever surfaces topically relevant CCC paragraphs, but often different sections than the gold-standard expected sources. The generation metrics are bounded by this retrieval gap: the model answers from what it retrieves, which is on-topic but not the exact paragraphs the test set was written against. Expanding the test set's acceptable sources and adding more test questions are planned improvements.
 
 ## Corpus
 
 | Source | Documents | Chunks | Type |
 |--------|-----------|--------|------|
 | Douay-Rheims Bible | 47 books | 2,777 | Scripture |
-| Catechism of the Catholic Church | 2,934 paragraphs | 4,754 | Doctrine |
-| **Total** | **2,981** | **7,531** | |
+| Catechism of the Catholic Church | 2,789 paragraphs | 4,754 | Doctrine |
+| **Total** | **2,836** | **7,531** | |
 
 ## Roadmap
 
-- [x] **Phase 1**  RAG core pipeline (ingest → retrieve → generate)
-- [ ] **Phase 2**  Evaluation framework (Precision@K, Recall@K, MRR, Faithfulness, BLEU/ROUGE)
-- [ ] **Phase 3**  Ablation experiments (chunking strategy comparison) + deployment
+- [x] **Phase 1** — RAG core pipeline (ingest → retrieve → generate)
+- [x] **Phase 2** — Evaluation framework (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1, Source Coverage)
+- [ ] **Phase 2.5** — Eval report & comparison tooling
+- [ ] **Phase 3** — Ablation experiments (chunking strategy comparison) + deployment
 
 ## Tech Stack
 
 | Component | Tool |
 |-----------|------|
-| Embeddings | sentence-transformers (`all-MiniLM-L6-v2`) |
-| Vector Store | ChromaDB |
+| Embeddings | `BAAI/bge-base-en-v1.5` via sentence-transformers |
+| Reranker | `cross-encoder/ms-marco-MiniLM-L-6-v2` |
+| Vector Store | ChromaDB (cosine similarity) |
 | LLM | Ollama (Mistral 7B) / OpenAI (gpt-4o-mini) |
 | API | FastAPI |
-| Eval | RAGAS, ROUGE, BLEU |
+| Eval | Custom metrics (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1) |
 | Config | Pydantic Settings |
-| Visualization | Plotly, Pandas |
 
 ## License
 

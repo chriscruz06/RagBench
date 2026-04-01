@@ -1,0 +1,416 @@
+{
+  "meta": {
+    "timestamp": "2026-03-31T17:14:11.587283",
+    "tag": null,
+    "mode": "full",
+    "dry_run": true,
+    "total_elapsed_seconds": 0.0,
+    "test_set_size": 10
+  },
+  "config": {
+    "embedding_model": "BAAI/bge-base-en-v1.5",
+    "chunk_strategy": "sentence",
+    "chunk_size": 512,
+    "chunk_overlap": 64,
+    "top_k": 5,
+    "similarity_threshold": 0.3,
+    "llm_provider": "ollama",
+    "ollama_model": "mistral",
+    "openai_model": null,
+    "temperature": 0.1,
+    "max_response_tokens": 1024
+  },
+  "aggregate": {
+    "mean_precision_at_k": 0.0,
+    "mean_recall_at_k": 0.0,
+    "mean_mrr": 0.0,
+    "mean_bleu": 0.0,
+    "mean_rouge_l_f1": 0.0,
+    "mean_token_f1": 0.0,
+    "mean_source_coverage": 0.0,
+    "abstention_rate": 1.0,
+    "total_questions": 10,
+    "by_topic": {
+      "sacraments": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.0,
+        "token_f1": 0.0,
+        "source_coverage": 0.0,
+        "count": 3
+      },
+      "creed": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.0,
+        "token_f1": 0.0,
+        "source_coverage": 0.0,
+        "count": 3
+      },
+      "morality": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.0,
+        "token_f1": 0.0,
+        "source_coverage": 0.0,
+        "count": 1
+      },
+      "prayer": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.0,
+        "token_f1": 0.0,
+        "source_coverage": 0.0,
+        "count": 1
+      },
+      "eschatology": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.0,
+        "token_f1": 0.0,
+        "source_coverage": 0.0,
+        "count": 1
+      },
+      "ecclesiology": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.0,
+        "token_f1": 0.0,
+        "source_coverage": 0.0,
+        "count": 1
+      }
+    }
+  },
+  "per_question": [
+    {
+      "question": "What is Baptism?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §1213",
+        "CCC §1265",
+        "Romans 6:3-4"
+      ],
+      "topic": "sacraments",
+      "expected_answer": "Baptism is the sacrament of regeneration and initiation into the Church, through which sins are forgiven and one becomes a new creature in Christ.",
+      "expected_sources": [
+        "CCC §1213",
+        "CCC §1265",
+        "Romans 6:3-4"
+      ],
+      "generated_answer": "Dry run answer for: What is Baptism?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What is the Holy Trinity?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §234",
+        "CCC §253",
+        "CCC §261"
+      ],
+      "topic": "creed",
+      "expected_answer": "The Trinity is the central mystery of the Christian faith: one God in three persons (Father, Son, and Holy Spirit) distinct but inseparable, equal in majesty.",
+      "expected_sources": [
+        "CCC §234",
+        "CCC §253",
+        "CCC §261"
+      ],
+      "generated_answer": "Dry run answer for: What is the Holy Trinity?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What is the Eucharist?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §1374",
+        "CCC §1376",
+        "1 Corinthians 11:23-26"
+      ],
+      "topic": "sacraments",
+      "expected_answer": "The Eucharist is the sacrament in which, under the appearances of bread and wine, the Body and Blood of Christ are truly, really, and substantially present.",
+      "expected_sources": [
+        "CCC §1374",
+        "CCC §1376",
+        "1 Corinthians 11:23-26"
+      ],
+      "generated_answer": "Dry run answer for: What is the Eucharist?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What are the Ten Commandments?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §2056",
+        "CCC §2058",
+        "Exodus 20:1-17"
+      ],
+      "topic": "morality",
+      "expected_answer": "The Ten Commandments are the moral law given by God to Moses on Mount Sinai, summarizing human duties toward God and neighbor.",
+      "expected_sources": [
+        "CCC §2056",
+        "CCC §2058",
+        "Exodus 20:1-17"
+      ],
+      "generated_answer": "Dry run answer for: What are the Ten Commandments?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What is Original Sin?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §396",
+        "CCC §404",
+        "CCC §405",
+        "Romans 5:12"
+      ],
+      "topic": "creed",
+      "expected_answer": "Original Sin is the sin inherited from Adam and Eve by all human beings, depriving them of original holiness and justice, and inclining human nature toward evil.",
+      "expected_sources": [
+        "CCC §396",
+        "CCC §404",
+        "CCC §405",
+        "Romans 5:12"
+      ],
+      "generated_answer": "Dry run answer for: What is Original Sin?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What is the role of the Blessed Virgin Mary?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §484",
+        "CCC §490",
+        "CCC §494",
+        "Luke 1:38"
+      ],
+      "topic": "creed",
+      "expected_answer": "Mary is the Mother of God, conceived without sin, who cooperated in the work of salvation through her faith and obedience, and who intercedes for the faithful.",
+      "expected_sources": [
+        "CCC §484",
+        "CCC §490",
+        "CCC §494",
+        "Luke 1:38"
+      ],
+      "generated_answer": "Dry run answer for: What is the role of the Blessed Virgin Mary?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What is the Sacrament of Reconciliation?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §1422",
+        "CCC §1424",
+        "CCC §1491"
+      ],
+      "topic": "sacraments",
+      "expected_answer": "Reconciliation (Confession) is the sacrament by which sins committed after Baptism are forgiven through the absolution of a priest, requiring contrition, confession, and satisfaction.",
+      "expected_sources": [
+        "CCC §1422",
+        "CCC §1424",
+        "CCC §1491"
+      ],
+      "generated_answer": "Dry run answer for: What is the Sacrament of Reconciliation?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What does the Church teach about prayer?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §2559",
+        "CCC §2590",
+        "CCC §2761"
+      ],
+      "topic": "prayer",
+      "expected_answer": "Prayer is the raising of the mind and heart to God, a vital and personal relationship with the living God. The Our Father is the summary of the whole Gospel and the most perfect prayer.",
+      "expected_sources": [
+        "CCC §2559",
+        "CCC §2590",
+        "CCC §2761"
+      ],
+      "generated_answer": "Dry run answer for: What does the Church teach about prayer?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What happens after death?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §1021",
+        "CCC §1022",
+        "CCC §1030",
+        "CCC §1033"
+      ],
+      "topic": "eschatology",
+      "expected_answer": "After death, each soul undergoes particular judgment. The righteous may enter heaven directly or through purification in purgatory, while those who die in mortal sin descend to hell.",
+      "expected_sources": [
+        "CCC §1021",
+        "CCC §1022",
+        "CCC §1030",
+        "CCC §1033"
+      ],
+      "generated_answer": "Dry run answer for: What happens after death?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    },
+    {
+      "question": "What is the Church?",
+      "abstained": true,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.0,
+      "rouge_l_precision": 0.0,
+      "rouge_l_recall": 0.0,
+      "token_f1": 0.0,
+      "token_precision": 0.0,
+      "token_recall": 0.0,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §748",
+        "CCC §751",
+        "CCC §763",
+        "Matthew 16:18"
+      ],
+      "topic": "ecclesiology",
+      "expected_answer": "The Church is the Body of Christ, the People of God, founded by Christ on the Apostles, guided by the Holy Spirit, and entrusted with the mission of proclaiming the Gospel to all nations.",
+      "expected_sources": [
+        "CCC §748",
+        "CCC §751",
+        "CCC §763",
+        "Matthew 16:18"
+      ],
+      "generated_answer": "Dry run answer for: What is the Church?",
+      "chunks_used": 0,
+      "elapsed_seconds": 0.0
+    }
+  ]
+}

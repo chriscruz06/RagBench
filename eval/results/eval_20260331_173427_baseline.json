@@ -1,0 +1,420 @@
+{
+  "meta": {
+    "timestamp": "2026-03-31T17:34:27.325330",
+    "tag": "baseline",
+    "mode": "full",
+    "dry_run": false,
+    "total_elapsed_seconds": 871.31,
+    "test_set_size": 10
+  },
+  "config": {
+    "embedding_model": "BAAI/bge-base-en-v1.5",
+    "chunk_strategy": "sentence",
+    "chunk_size": 512,
+    "chunk_overlap": 64,
+    "top_k": 5,
+    "similarity_threshold": 0.3,
+    "llm_provider": "ollama",
+    "ollama_model": "mistral",
+    "openai_model": null,
+    "temperature": 0.1,
+    "max_response_tokens": 1024
+  },
+  "aggregate": {
+    "mean_precision_at_k": 0.14,
+    "mean_recall_at_k": 0.15,
+    "mean_mrr": 0.27,
+    "mean_bleu": 0.0367,
+    "mean_rouge_l_f1": 0.1894,
+    "mean_token_f1": 0.2684,
+    "mean_source_coverage": 0.1167,
+    "abstention_rate": 0.0,
+    "total_questions": 10,
+    "by_topic": {
+      "sacraments": {
+        "precision_at_k": 0.1333,
+        "recall_at_k": 0.1111,
+        "mrr": 0.3333,
+        "bleu": 0.0128,
+        "rouge_l_f1": 0.1801,
+        "token_f1": 0.246,
+        "source_coverage": 0.1111,
+        "count": 3
+      },
+      "creed": {
+        "precision_at_k": 0.2,
+        "recall_at_k": 0.3056,
+        "mrr": 0.2333,
+        "bleu": 0.0635,
+        "rouge_l_f1": 0.2,
+        "token_f1": 0.3142,
+        "source_coverage": 0.1944,
+        "count": 3
+      },
+      "morality": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0738,
+        "rouge_l_f1": 0.2326,
+        "token_f1": 0.3297,
+        "source_coverage": 0.0,
+        "count": 1
+      },
+      "prayer": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0,
+        "rouge_l_f1": 0.163,
+        "token_f1": 0.2105,
+        "source_coverage": 0.0,
+        "count": 1
+      },
+      "eschatology": {
+        "precision_at_k": 0.4,
+        "recall_at_k": 0.25,
+        "mrr": 1.0,
+        "bleu": 0.0242,
+        "rouge_l_f1": 0.1463,
+        "token_f1": 0.2131,
+        "source_coverage": 0.25,
+        "count": 1
+      },
+      "ecclesiology": {
+        "precision_at_k": 0.0,
+        "recall_at_k": 0.0,
+        "mrr": 0.0,
+        "bleu": 0.0399,
+        "rouge_l_f1": 0.2118,
+        "token_f1": 0.25,
+        "source_coverage": 0.0,
+        "count": 1
+      }
+    }
+  },
+  "per_question": [
+    {
+      "question": "What is Baptism?",
+      "abstained": false,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.2041,
+      "rouge_l_precision": 0.1351,
+      "rouge_l_recall": 0.4167,
+      "token_f1": 0.3514,
+      "token_precision": 0.25,
+      "token_recall": 0.5909,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §1213",
+        "CCC §1265",
+        "Romans 6:3-4"
+      ],
+      "topic": "sacraments",
+      "expected_answer": "Baptism is the sacrament of regeneration and initiation into the Church, through which sins are forgiven and one becomes a new creature in Christ.",
+      "expected_sources": [
+        "CCC §1213",
+        "CCC §1265",
+        "Romans 6:3-4"
+      ],
+      "generated_answer": " Baptism is a sacrament essential for salvation that unites a person with Christ, forgives original and personal sins, and initiates a new life in the Church (CCC §1277, §985, §3). It is the foundation of communion among all Christians, even those not yet in full communion with the Catholic Church (CCC §1271). Baptismal grace incorporates the baptized into the Body of Christ and makes them a sharer in the priesthood of Christ (CCC §1279).",
+      "chunks_used": 5,
+      "elapsed_seconds": 94.79
+    },
+    {
+      "question": "What is the Holy Trinity?",
+      "abstained": false,
+      "precision_at_k": 0.4,
+      "recall_at_k": 0.6667,
+      "mrr": 0.5,
+      "bleu": 0.1011,
+      "rouge_l_f1": 0.2,
+      "rouge_l_precision": 0.1194,
+      "rouge_l_recall": 0.6154,
+      "token_f1": 0.375,
+      "token_precision": 0.2466,
+      "token_recall": 0.7826,
+      "source_coverage": 0.3333,
+      "sources_cited": [
+        "CCC §234"
+      ],
+      "sources_missing": [
+        "CCC §253",
+        "CCC §261"
+      ],
+      "topic": "creed",
+      "expected_answer": "The Trinity is the central mystery of the Christian faith: one God in three persons (Father, Son, and Holy Spirit) distinct but inseparable, equal in majesty.",
+      "expected_sources": [
+        "CCC §234",
+        "CCC §253",
+        "CCC §261"
+      ],
+      "generated_answer": " The Holy Trinity refers to the mystery of one God in three Persons: Father, Son, and Holy Spirit. This central mystery of Christian faith and life is revealed by Jesus Christ, the divine Son of the eternal Father (CCC §3). It is a mystery that is inaccessible to reason alone or even to Israel's faith before the Incarnation of God's Son and the sending of the Holy Spirit (CCC §237). When we pray to the Father, we adore and glorify him together with the Son and the Holy Spirit (CCC §2789). The mystery of the Trinity is the source of all other mysteries of faith (CCC §245, 253).\n\nFor further study, consider exploring Catechism sections on Person, Divine (CCC §232, 237, 249, 253-256) and the mystery of God in himself (CCC §234, 245).",
+      "chunks_used": 5,
+      "elapsed_seconds": 79.7
+    },
+    {
+      "question": "What is the Eucharist?",
+      "abstained": false,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0384,
+      "rouge_l_f1": 0.1835,
+      "rouge_l_precision": 0.1205,
+      "rouge_l_recall": 0.3846,
+      "token_f1": 0.1667,
+      "token_precision": 0.1154,
+      "token_recall": 0.3,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §1374",
+        "CCC §1376",
+        "1 Corinthians 11:23-26"
+      ],
+      "topic": "sacraments",
+      "expected_answer": "The Eucharist is the sacrament in which, under the appearances of bread and wine, the Body and Blood of Christ are truly, really, and substantially present.",
+      "expected_sources": [
+        "CCC §1374",
+        "CCC §1376",
+        "1 Corinthians 11:23-26"
+      ],
+      "generated_answer": " The Eucharist is the principal Christian liturgical celebration of thanksgiving to God, constituting the heart and summit of the Church's life (CCC §1409, §3, §1407). It is a memorial of Christ’s Passover, commemorating His work of salvation accomplished through His life, death, and resurrection (CCC §1409, §1362). The Eucharist is also known as the Holy Sacrifice of the Mass and completes Christian initiation (CCC §3). It is a sacrifice of thanksgiving to the Father, expressing gratitude for all God's benefits (CCC §1360).",
+      "chunks_used": 5,
+      "elapsed_seconds": 66.29
+    },
+    {
+      "question": "What are the Ten Commandments?",
+      "abstained": false,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0738,
+      "rouge_l_f1": 0.2326,
+      "rouge_l_precision": 0.1402,
+      "rouge_l_recall": 0.6818,
+      "token_f1": 0.3297,
+      "token_precision": 0.2113,
+      "token_recall": 0.75,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §2056",
+        "CCC §2058",
+        "Exodus 20:1-17"
+      ],
+      "topic": "morality",
+      "expected_answer": "The Ten Commandments are the moral law given by God to Moses on Mount Sinai, summarizing human duties toward God and neighbor.",
+      "expected_sources": [
+        "CCC §2056",
+        "CCC §2058",
+        "Exodus 20:1-17"
+      ],
+      "generated_answer": " The Ten Commandments are a set of fundamental obligations given by God to Moses on Sinai, as stated in the Catechism (CCC §4). They express man's duties towards God and his neighbor (CCC §2072, 2067) and provide a privileged expression of the natural law (CCC §2070). The first three commandments concern love of God, while the other seven address love of neighbor (CCC §2067). The Ten Commandments are immutable and obligatory for everyone at all times (CCC §2072). For further study, the Catechism references the Decalogue (CCC §3) and mentions that obedience to these precepts also implies obligations in matter which is, in itself, light (CCC §2081).",
+      "chunks_used": 5,
+      "elapsed_seconds": 73.87
+    },
+    {
+      "question": "What is Original Sin?",
+      "abstained": false,
+      "precision_at_k": 0.2,
+      "recall_at_k": 0.25,
+      "mrr": 0.2,
+      "bleu": 0.0658,
+      "rouge_l_f1": 0.2479,
+      "rouge_l_precision": 0.1596,
+      "rouge_l_recall": 0.5556,
+      "token_f1": 0.3659,
+      "token_precision": 0.25,
+      "token_recall": 0.6818,
+      "source_coverage": 0.25,
+      "sources_cited": [
+        "CCC §404"
+      ],
+      "sources_missing": [
+        "CCC §396",
+        "CCC §405",
+        "Romans 5:12"
+      ],
+      "topic": "creed",
+      "expected_answer": "Original Sin is the sin inherited from Adam and Eve by all human beings, depriving them of original holiness and justice, and inclining human nature toward evil.",
+      "expected_sources": [
+        "CCC §396",
+        "CCC §404",
+        "CCC §405",
+        "Romans 5:12"
+      ],
+      "generated_answer": " Original Sin refers to the sin committed by Adam and Eve in disobeying God's commandment (CCC §3). This sin resulted in the loss of original holiness and subjected all humans born into the world to a fallen state (CCC §3, §5). It is not an act but a state, a condition of human nature that is deprived of original holiness and justice (CCC §404). The doctrine of original sin provides insight into man's situation in the world and his relationship with Christ, who came to redeem us from this fallen state (CCC §389, §407).",
+      "chunks_used": 5,
+      "elapsed_seconds": 69.1
+    },
+    {
+      "question": "What is the role of the Blessed Virgin Mary?",
+      "abstained": false,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0236,
+      "rouge_l_f1": 0.152,
+      "rouge_l_precision": 0.0903,
+      "rouge_l_recall": 0.4815,
+      "token_f1": 0.2017,
+      "token_precision": 0.1237,
+      "token_recall": 0.5455,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §484",
+        "CCC §490",
+        "CCC §494",
+        "Luke 1:38"
+      ],
+      "topic": "creed",
+      "expected_answer": "Mary is the Mother of God, conceived without sin, who cooperated in the work of salvation through her faith and obedience, and who intercedes for the faithful.",
+      "expected_sources": [
+        "CCC §484",
+        "CCC §490",
+        "CCC §494",
+        "Luke 1:38"
+      ],
+      "generated_answer": " The Blessed Virgin Mary plays a significant role in the Church, which is inseparable from her union with Christ (CCC §964). She is acknowledged as the Mother of God and of the redeemer, and also as the Mother of the members of Christ within the Church (CCC §963). Her function as mother of men does not obscure or diminish Christ's unique mediation but rather shows its power (CCC §970).\n\nMary continues her saving office in heaven through manifold intercession, bringing us the gifts of eternal salvation (CCC §969). She is invoked in the Church under various titles such as Advocate, Helper, Benefactress, and Mediatrix (CCC §969). After completing her earthly life, Mary was taken up body and soul into heaven, sharing in the glory of her Son's Resurrection (CCC §974).\n\nFor further study, consider CCC sections 484-507, 721-726, 149, 501, and 1370.",
+      "chunks_used": 5,
+      "elapsed_seconds": 85.19
+    },
+    {
+      "question": "What is the Sacrament of Reconciliation?",
+      "abstained": false,
+      "precision_at_k": 0.4,
+      "recall_at_k": 0.3333,
+      "mrr": 1.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.1528,
+      "rouge_l_precision": 0.0917,
+      "rouge_l_recall": 0.4583,
+      "token_f1": 0.2198,
+      "token_precision": 0.1449,
+      "token_recall": 0.4545,
+      "source_coverage": 0.3333,
+      "sources_cited": [
+        "CCC §1424"
+      ],
+      "sources_missing": [
+        "CCC §1422",
+        "CCC §1491"
+      ],
+      "topic": "sacraments",
+      "expected_answer": "Reconciliation (Confession) is the sacrament by which sins committed after Baptism are forgiven through the absolution of a priest, requiring contrition, confession, and satisfaction.",
+      "expected_sources": [
+        "CCC §1422",
+        "CCC §1424",
+        "CCC §1491"
+      ],
+      "generated_answer": " The Sacrament of Reconciliation, as detailed in Catechism sections 1424, 1449, 1442, and 1468, is a sacrament that restores individuals to God's grace and friendship (CCC §1468). It is also referred to as the sacrament of forgiveness because through the priest's absolution, God grants pardon and peace to the penitent (CCC §1424, 1456). The sacrament is called Reconciliation because it imparts the love of God who reconciles us with Him (CCC §1456). It is a confession of God's holiness and mercy towards sinful man (CCC §1456). The secret of this sacrament is sacred and inviolable (CCC §2490).\n\n(CCC §1424, 1449, 1442, 1468, 2490)\n\nCross-references for further study: CCC sections on Penance and the Eucharist (see CCC §1378–1379, 1422).",
+      "chunks_used": 5,
+      "elapsed_seconds": 106.96
+    },
+    {
+      "question": "What does the Church teach about prayer?",
+      "abstained": false,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0,
+      "rouge_l_f1": 0.163,
+      "rouge_l_precision": 0.1007,
+      "rouge_l_recall": 0.4286,
+      "token_f1": 0.2105,
+      "token_precision": 0.1319,
+      "token_recall": 0.5217,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §2559",
+        "CCC §2590",
+        "CCC §2761"
+      ],
+      "topic": "prayer",
+      "expected_answer": "Prayer is the raising of the mind and heart to God, a vital and personal relationship with the living God. The Our Father is the summary of the whole Gospel and the most perfect prayer.",
+      "expected_sources": [
+        "CCC §2559",
+        "CCC §2590",
+        "CCC §2761"
+      ],
+      "generated_answer": " The Church teaches that prayer is nourished by the Word of God and the celebration of the liturgy (CCC §2665). This prayer, primarily addressed to the Father, includes forms directed towards Christ in all liturgical traditions (CCC §2665). The Holy Spirit instructs the Church in the life of prayer, inspiring various expressions such as blessing, petition, intercession, thanksgiving, and praise (CCC §2644).\n\nThe prayer of the Church and personal prayer nourish hope in us, while the psalms especially teach us to fix our hope in God (CCC §2657). The Church exhorts all the faithful to learn about Jesus Christ through frequent reading of the divine Scriptures, emphasizing that prayer should accompany this reading (CCC §2653). Lastly, the Holy Spirit teaches children of God how to pray through a living transmission within the believing and praying Church (CCC §2650).\n\nFor further study, consider exploring Catechism sections 133, 1100, and 75.",
+      "chunks_used": 5,
+      "elapsed_seconds": 80.75
+    },
+    {
+      "question": "What happens after death?",
+      "abstained": false,
+      "precision_at_k": 0.4,
+      "recall_at_k": 0.25,
+      "mrr": 1.0,
+      "bleu": 0.0242,
+      "rouge_l_f1": 0.1463,
+      "rouge_l_precision": 0.0882,
+      "rouge_l_recall": 0.4286,
+      "token_f1": 0.2131,
+      "token_precision": 0.1368,
+      "token_recall": 0.4815,
+      "source_coverage": 0.25,
+      "sources_cited": [
+        "CCC §1021"
+      ],
+      "sources_missing": [
+        "CCC §1022",
+        "CCC §1030",
+        "CCC §1033"
+      ],
+      "topic": "eschatology",
+      "expected_answer": "After death, each soul undergoes particular judgment. The righteous may enter heaven directly or through purification in purgatory, while those who die in mortal sin descend to hell.",
+      "expected_sources": [
+        "CCC §1021",
+        "CCC §1022",
+        "CCC §1030",
+        "CCC §1033"
+      ],
+      "generated_answer": " After death, according to the provided passages, there is an end to human life on earth as we know it (CCC §1021, §1013). The New Testament speaks of a judgment that occurs either at the final encounter with Christ in his second coming or immediately after death, in accordance with one's works and faith (CCC §1021, cross-reference to CCC §679).\n\nThe parable of Lazarus and the good thief suggests a different final destiny for some and others (CCC §1021). Those who die in God's grace but are not fully purified undergo a purification after death to achieve the holiness necessary to enter the joy of God (CCC §1054).\n\nLastly, the resurrection of the body is believed in Christianity, meaning that even our mortal bodies will come to life again on the last day (CCC §3).",
+      "chunks_used": 5,
+      "elapsed_seconds": 79.22
+    },
+    {
+      "question": "What is the Church?",
+      "abstained": false,
+      "precision_at_k": 0.0,
+      "recall_at_k": 0.0,
+      "mrr": 0.0,
+      "bleu": 0.0399,
+      "rouge_l_f1": 0.2118,
+      "rouge_l_precision": 0.1324,
+      "rouge_l_recall": 0.5294,
+      "token_f1": 0.25,
+      "token_precision": 0.1625,
+      "token_recall": 0.5417,
+      "source_coverage": 0.0,
+      "sources_cited": [],
+      "sources_missing": [
+        "CCC §748",
+        "CCC §751",
+        "CCC §763",
+        "Matthew 16:18"
+      ],
+      "topic": "ecclesiology",
+      "expected_answer": "The Church is the Body of Christ, the People of God, founded by Christ on the Apostles, guided by the Holy Spirit, and entrusted with the mission of proclaiming the Gospel to all nations.",
+      "expected_sources": [
+        "CCC §748",
+        "CCC §751",
+        "CCC §763",
+        "Matthew 16:18"
+      ],
+      "generated_answer": " The Church, as described in the provided context, is a central concept in Catholic theology. It can be understood as the Body of Christ (CCC §805), the Temple of the Holy Spirit (CCC §809), and both visible and spiritual, a hierarchical society and the Mystical Body of Christ (CCC §779). The Church is one, yet formed of two components, human and divine (CCC §778). It is the means and goal of God's plan, prefigured in creation, prepared for in the Old Covenant, founded by Jesus Christ, fulfilled by his redeeming cross and Resurrection, and will be perfected in the glory of heaven as the assembly of all the redeemed (CCC §778). The Church is also referred to as \"the world reconciled\" and \"the bark which navigates safely in this world,\" prefigured by Noah's ark (CCC §845).",
+      "chunks_used": 5,
+      "elapsed_seconds": 135.43
+    }
+  ]
+}
