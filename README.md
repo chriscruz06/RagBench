@@ -4,9 +4,10 @@
 
 RagBench ingests the **Catechism of the Catholic Church (CCC)** and **Sacred Scripture (Douay-Rheims Bible)**, embeds them into a local vector store, and answers theological questions with grounded, cited responses. An evaluation framework measures retrieval precision, generation faithfulness, and end-to-end accuracy across different pipeline configurations.
 
-The system is designed around a core principle: **the LLM is a curator, not a theologian.** Every response must be grounded in retrieved source material, every claim must cite a specific CCC paragraph or Scripture verse, and the system explicitly abstains when retrieved context is insufficient, trading recall for faithfulness.
+The system is designed around a core principle: **the LLM is a curator, not a theologian.** Every response must be grounded in retrieved source material, every claim must cite a specific CCC paragraph or Scripture verse, and the system explicitly abstains when retrieved context is insufficient, trading recall for faithfulness. If the goal was making a model to spout some random heresies, it would've been made to do so explicitly.
 
 ## Architecture
+(This diagram has slowly become more messy and messy, hopefully it will survive the project)
 
 ```
 ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
@@ -124,7 +125,7 @@ ragbench/
 
 **Similarity threshold abstention**  If no retrieved chunk scores above the configured threshold, the system declines to answer rather than hallucinating. This is a deliberate tradeoff: lower recall in exchange for higher faithfulness to the text (don't want to accidentally recreate some ancient heresy).
 
-**"Curator, not theologian" prompt design**  The system prompt constrains the LLM to organize and present retrieved content, not to synthesize or interpret independently. This is the primary defense against unfaithful generation — the model cites CCC paragraphs and Scripture, it doesn't do theology.
+**"Curator, not theologian" prompt design**  The system prompt constrains the LLM to organize and present retrieved content, and not to synthesize or interpret independently. This is the most active barrier against hallucinating its way to some heresy; it doesn't do any actual theology.
 
 **Citation enforcement**  Every claim in a response must reference a specific CCC paragraph (e.g., CCC §1234) or Scripture verse (e.g., Romans 5:8). Responses without citations indicate retrieval or generation failure.
 
@@ -153,12 +154,12 @@ First full pipeline evaluation (10 questions, 6 topics):
 | Recall@K | 0.150 | Retrieval finds relevant content, often different §'s than gold set |
 | MRR | 0.270 | First gold-standard hit typically at rank 2–4 |
 | **Generation** | | |
-| BLEU | 0.035 | Expected low — Mistral paraphrases rather than echoing gold answers |
+| BLEU | 0.035 | Expected low - Mistral paraphrases rather than echoing gold answers |
 | ROUGE-L F1 | 0.190 | Moderate subsequence overlap with expected answers |
 | Token F1 | 0.261 | ~26% keyword overlap, reasonable given different source paragraphs |
 | Source Coverage | 0.117 | Model cites retrieved paragraphs, not the specific gold-standard ones |
 
-These scores reflect a strict evaluation — the retriever surfaces topically relevant CCC paragraphs, but often different sections than the gold-standard expected sources. The generation metrics are bounded by this retrieval gap: the model answers from what it retrieves, which is on-topic but not the exact paragraphs the test set was written against. Expanding the test set's acceptable sources and adding more test questions are planned improvements.
+These scores reflect a strict evaluation; the retriever surfaces topically relevant CCC paragraphs, but often different sections than the gold-standard expected sources. The generation metrics are bounded by this retrieval gap. The model answers from what it retrieves, which is on-topic but not the exact paragraphs the test set was written against. Expanding the test set's acceptable sources and adding more test questions are planned improvements.
 
 ## Corpus
 
@@ -170,10 +171,10 @@ These scores reflect a strict evaluation — the retriever surfaces topically re
 
 ## Roadmap
 
-- [x] **Phase 1** — RAG core pipeline (ingest → retrieve → generate)
-- [x] **Phase 2** — Evaluation framework (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1, Source Coverage)
-- [ ] **Phase 2.5** — Eval report & comparison tooling
-- [ ] **Phase 3** — Ablation experiments (chunking strategy comparison) + deployment
+- [x] **Phase 1** - RAG core pipeline (ingest → retrieve → generate)
+- [x] **Phase 2** - Evaluation framework (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1, Source Coverage)
+- [ ] **Phase 2.5** - Eval report & comparison tooling
+- [ ] **Phase 3** - Ablation experiments (chunking strategy comparison) + deployment
 
 ## Tech Stack
 
