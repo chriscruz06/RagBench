@@ -173,7 +173,7 @@ These scores reflect a strict evaluation; the retriever surfaces topically relev
 
 - [x] **Phase 1** - RAG core pipeline (ingest → retrieve → generate)
 - [x] **Phase 2** - Evaluation framework (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1, Source Coverage)
-- [ ] **Phase 2.5** - Eval report & comparison tooling
+- [X] **Phase 2.5** - Eval report & comparison tooling
 - [ ] **Phase 3** - Ablation experiments (chunking strategy comparison) + deployment
 
 ## Tech Stack
