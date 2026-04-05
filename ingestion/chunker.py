@@ -116,6 +116,14 @@ def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
         return 0.0
     return float(dot / norm)
 
+_st_model = None
+
+def _get_st_model():
+    """Load SentenceTransformer once and reuse across documents."""
+    global _st_model
+    if _st_model is None:
+        _st_model = SentenceTransformer(settings.embedding_model)
+    return _st_model
 
 def chunk_semantic(doc: Document) -> list[Document]:
     """
@@ -151,7 +159,7 @@ def chunk_semantic(doc: Document) -> list[Document]:
         )] if doc.text.strip() else []
 
     # ── Step 1: Embed all sentences in a single batch ──
-    model = SentenceTransformer(settings.embedding_model)
+    model = _get_st_model()
     embeddings = model.encode(sentences, show_progress_bar=False)
 
     # ── Step 2: Find breakpoints ──
