@@ -47,15 +47,18 @@ def store_chunks(chunks: list[Document], collection_name: str = "ragbench") -> N
         texts.append(chunk.text)
         metadatas.append(chunk.metadata)
 
-    # Embed and upsert
+    # Embed and upsert in batches (ChromaDB max batch = 5461)
+    BATCH_SIZE = 5000
     embeddings = embedding_fn.embed_documents(texts)
 
-    collection.upsert(
-        ids=ids,
-        documents=texts,
-        embeddings=embeddings,
-        metadatas=metadatas,
-    )
+    for start in range(0, len(ids), BATCH_SIZE):
+        end = start + BATCH_SIZE
+        collection.upsert(
+            ids=ids[start:end],
+            documents=texts[start:end],
+            embeddings=embeddings[start:end],
+            metadatas=metadatas[start:end],
+        )
 
     print(f"[embedder] Stored {len(chunks)} chunks in collection '{collection_name}'")
 
