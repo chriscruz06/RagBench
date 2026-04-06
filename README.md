@@ -6,6 +6,21 @@ RagBench ingests the **Catechism of the Catholic Church (CCC)** and **Sacred Scr
 
 The system is designed around a core principle: **the LLM is a curator, not a theologian.** Every response must be grounded in retrieved source material, every claim must cite a specific CCC paragraph or Scripture verse, and the system explicitly abstains when retrieved context is insufficient, trading recall for faithfulness. If the goal was making a model to spout some random heresies, it would've been made to do so explicitly.
 
+The repo contains two related things:
+
+- **RagBench** - the RAG pipeline, evaluation framework, and ablation experiments. Lives in `ingestion/`, `retrieval/`, `generation/`, `eval/`, and `experiments/`.
+- **Catena** - a minimal web frontend built on top of RagBench, named after the *Catena Aurea* ("Golden Chain") tradition of patristic biblical commentary. Lives in `frontend/`. It's a focused study tool: ask a theological question, receive a cited answer with the underlying passages displayed beneath like footnotes.
+
+## Catena
+
+![Catena empty state](docs/screenshots/catena-empty.png)
+
+![Catena answering a question](docs/screenshots/catena-answer.png)
+
+Catena is the user-facing study tool. Design goals: minimal, calm, contemplative; closer to reading a printed theological commentary than using a chat product. EB Garamond serif type, warm cream background, restrained burgundy accent. Every CCC reference in the answer is a clickable link that scrolls to the matching source below and briefly highlights it. An optional debug panel (`Ctrl+Shift+D`) reveals intrinsic evaluation metrics (relevance, faithfulness, context utilization) for development work without intruding on the reading experience.
+
+Setup instructions are in [`frontend/README.md`](frontend/README.md). The short version is in step 9 of the Quick Start below.
+
 ## Architecture
 (This diagram has slowly become more messy and messy, hopefully it will survive the project)
 
@@ -88,6 +103,15 @@ python -m eval.runner --dry-run                # test the harness
 # 9. Run ablation experiments
 python -m experiments.ablation --retrieval-only # compare chunking strategies
 python -m eval.report --all                    # view comparison table
+
+# 10. (Optional) Run the FastAPI backend for the Catena frontend
+uvicorn api.app:app --reload --port 8000
+
+# 11. (Recommended) Run the Catena web frontend
+#     In a separate terminal, with Node 18+ installed:
+cd frontend
+npm install                                    # first time only
+npm run dev                                    # opens at http://localhost:5173
 ```
 
 ## Project Structure
@@ -118,14 +142,28 @@ ragbench/
 │   ├── test_chunker_semantic.py  # Semantic chunking tests (17 tests)
 │   └── test_ablation.py    # Ablation harness tests (7 tests)
 ├── api/
-│   └── app.py              # FastAPI backend
+│   └── app.py              # FastAPI backend - serves /query with sources + debug metrics
+├── frontend/               # Catena - React + Vite + Tailwind study tool
+│   ├── src/
+│   │   ├── components/     # Layout, Header, QuestionInput, AnswerView, SourceList, DebugPanel
+│   │   ├── context/        # DebugContext (debug-mode toggle, persisted to localStorage)
+│   │   ├── pages/          # Study (the main page)
+│   │   ├── App.jsx         # Routes
+│   │   └── main.jsx        # React entry
+│   ├── index.html
+│   ├── package.json
+│   ├── tailwind.config.js  # Cream/parchment palette, EB Garamond serif
+│   └── vite.config.js      # Dev proxy: /api → http://localhost:8000
 ├── config/
 │   └── settings.py         # Centralized config via Pydantic
 ├── data/
 │   ├── raw/                # Source documents (not tracked)
 │   └── processed/          # Cleaned + structured corpus (not tracked)
+├── docs/
+│   └── screenshots/        # README assets
 ├── pipeline.py             # End-to-end orchestrator
 ├── test_pipeline.py        # Smoke tests for each pipeline component
+├── HOW_IT_WORKS.md         # Plain-language walkthrough of the whole pipeline
 ├── requirements.txt
 └── .env.example
 ```
@@ -140,7 +178,7 @@ ragbench/
 
 **Citation enforcement**  Every claim in a response must reference a specific CCC paragraph (e.g., CCC §1234) or Scripture verse (e.g., Romans 5:8). Responses without citations indicate retrieval or generation failure.
 
-**Pluggable chunking strategies**  Fixed-size, sentence-level, and semantic chunking are implemented behind a common interface. Phase 3 ablation experiments showed sentence-level chunking outperforms both alternatives on this corpus — semantic chunking over-fragments the CCC's already well-structured paragraphs.
+**Pluggable chunking strategies**  Fixed-size, sentence-level, and semantic chunking are implemented behind a common interface. Phase 3 ablation experiments showed sentence-level chunking outperforms both alternatives on this corpus, semantic chunking over-fragments the CCC's already well-structured paragraphs.
 
 **Pluggable LLM backend**  The generation layer supports both local models via Ollama (zero cost) and cloud models via OpenAI, configurable through environment variables.
 
@@ -182,11 +220,11 @@ Controlled experiment comparing three chunking strategies, holding embedding mod
 | **Sentence** | **0.140** | **0.150** | **0.270** | 0.252 | **0.182** | **0.036** | 0.108 | 7,376 |
 | Semantic | 0.080 | 0.125 | 0.175 | 0.258 | 0.171 | 0.029 | 0.150 | 11,751 |
 
-**Finding 1 — Sentence chunking wins on retrieval.** P@K improves 40% over fixed (0.140 vs 0.100) and 75% over semantic (0.140 vs 0.080). Sentence-level boundaries preserve semantic units without fighting the corpus's natural structure.
+**Finding 1, Sentence chunking wins on retrieval.** P@K improves 40% over fixed (0.140 vs 0.100) and 75% over semantic (0.140 vs 0.080). Sentence-level boundaries preserve semantic units without fighting the corpus's natural structure.
 
-**Finding 2 — Semantic chunking over-fragments the CCC.** The semantic strategy produced 59% more chunks (11,751 vs ~7,500) by splitting paragraphs on topic shifts, but CCC paragraphs are already self-contained doctrinal units. The "topic shifts" it detects within paragraphs are often meaningful context (e.g., doctrine → scriptural citation) that should stay together. More chunks, worse retrieval.
+**Finding 2, Semantic chunking over-fragments the CCC.** The semantic strategy produced 59% more chunks (11,751 vs ~7,500) by splitting paragraphs on topic shifts, but CCC paragraphs are already self-contained doctrinal units. The "topic shifts" it detects within paragraphs are often meaningful context (e.g., doctrine → scriptural citation) that should stay together. More chunks, worse retrieval.
 
-**Finding 3 — Generation metrics are nearly flat across strategies.** Token F1 ranges only 0.252–0.263 (~4% spread) despite P@K ranging 0.080–0.140 (75% spread). This suggests Mistral produces similar-quality paraphrased answers regardless of whether it received the "best" paragraphs or topically adjacent ones — the LLM is doing heavy paraphrasing work that masks retrieval differences downstream. Retrieval metrics are the more sensitive indicator of pipeline quality on this corpus.
+**Finding 3, Generation metrics are nearly flat across strategies.** Token F1 ranges only 0.252–0.263 (~4% spread) despite P@K ranging 0.080–0.140 (75% spread). This suggests Mistral produces similar-quality paraphrased answers regardless of whether it received the "best" paragraphs or topically adjacent ones, the LLM is doing heavy paraphrasing work that masks retrieval differences downstream. Retrieval metrics are the more sensitive indicator of pipeline quality on this corpus.
 
 **Practical takeaway:** use sentence-level chunking. It has the best retrieval scores, the lowest chunk count (fastest ingestion and query), and comparable generation quality. Complexity for its own sake loses to structural fit with the corpus.
 
@@ -204,6 +242,7 @@ Controlled experiment comparing three chunking strategies, holding embedding mod
 - [x] **Phase 2** - Evaluation framework (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1, Source Coverage)
 - [x] **Phase 2.5** - Eval report & comparison tooling
 - [x] **Phase 3** - Ablation experiments (chunking strategy comparison: fixed vs. sentence vs. semantic)
+- [x] **Phase 4** - Catena web frontend (React + Tailwind study tool with markdown answers, clickable citations, and a developer debug panel)
 
 ## Tech Stack
 
@@ -214,6 +253,7 @@ Controlled experiment comparing three chunking strategies, holding embedding mod
 | Vector Store | ChromaDB (cosine similarity) |
 | LLM | Ollama (Mistral 7B) / OpenAI (gpt-4o-mini) |
 | API | FastAPI |
+| Frontend | React 18 + Vite + Tailwind CSS + react-markdown |
 | Eval | Custom metrics (Precision@K, Recall@K, MRR, BLEU, ROUGE-L, Token F1) |
 | Config | Pydantic Settings |
 
