@@ -13,8 +13,6 @@ The repo contains two related things:
 
 ## Catena
 
-![Catena empty state](docs/screenshots/catena-empty.png)
-
 ![Catena answering a question](docs/screenshots/catena-answer.png)
 
 Catena is the user-facing study tool. Design goals: minimal, calm, contemplative; closer to reading a printed theological commentary than using a chat product. EB Garamond serif type, warm cream background, restrained burgundy accent. Every CCC reference in the answer is a clickable link that scrolls to the matching source below and briefly highlights it. An optional debug panel (`Ctrl+Shift+D`) reveals intrinsic evaluation metrics (relevance, faithfulness, context utilization) for development work without intruding on the reading experience.
@@ -165,6 +163,7 @@ ragbench/
 ├── test_pipeline.py        # Smoke tests for each pipeline component
 ├── HOW_IT_WORKS.md         # Plain-language walkthrough of the whole pipeline
 ├── requirements.txt
+├── LICENSE.txt
 └── .env.example
 ```
 
