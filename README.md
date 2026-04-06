@@ -174,17 +174,21 @@ These scores reflect a strict evaluation; the retriever surfaces topically relev
 
 ## Phase 3: Chunking Ablation Results
 
-Controlled experiment comparing three chunking strategies, holding embedding model (BGE-base), retrieval top-K (50), and cross-encoder reranker constant. Each run re-ingested the full corpus from scratch and evaluated against the same 10-question test set (retrieval-only mode).
+Controlled experiment comparing three chunking strategies, holding embedding model (BGE-base), retrieval top-K (50), cross-encoder reranker, and LLM (Mistral 7B) constant. Each run re-ingested the full corpus from scratch and ran the complete retrieve → generate pipeline against the same 10-question test set.
 
-| Strategy | P@K | R@K | MRR | Chunks | Notes |
-|----------|------|------|------|--------|-------|
-| Fixed | 0.100 | 0.150 | 0.245 | ~7,531 | Character-level splits with overlap; can break mid-sentence |
-| **Sentence** | **0.140** | **0.150** | **0.270** | **~7,531** | **Best performer — preserves sentence boundaries** |
-| Semantic | 0.080 | 0.125 | 0.175 | 11,751 | Embedding-based breakpoints; over-fragments the CCC corpus |
+| Strategy | P@K | R@K | MRR | Token F1 | ROUGE-L | BLEU | Src Cov | Chunks |
+|----------|------|------|------|----------|---------|------|---------|--------|
+| Fixed | 0.100 | 0.150 | 0.245 | **0.263** | 0.170 | 0.021 | **0.167** | 7,744 |
+| **Sentence** | **0.140** | **0.150** | **0.270** | 0.252 | **0.182** | **0.036** | 0.108 | 7,376 |
+| Semantic | 0.080 | 0.125 | 0.175 | 0.258 | 0.171 | 0.029 | 0.150 | 11,751 |
 
-**Key finding: sentence-level chunking wins across all retrieval metrics.** Semantic chunking, despite being the most sophisticated strategy, performed worst. The reason is structural: CCC paragraphs are already self-contained doctrinal units, so embedding-based splitting over-fragments them — producing 56% more chunks without improving (and actually hurting) retrieval quality. The semantic strategy splits on topic shifts within paragraphs, but for the CCC, those "shifts" (e.g., from doctrine to scriptural citation) are actually meaningful context that should stay together.
+**Finding 1 — Sentence chunking wins on retrieval.** P@K improves 40% over fixed (0.140 vs 0.100) and 75% over semantic (0.140 vs 0.080). Sentence-level boundaries preserve semantic units without fighting the corpus's natural structure.
 
-This validates the principle that chunking strategy should be chosen based on corpus structure, not complexity. The sentence strategy outperforms because it respects natural language boundaries without fighting the document's inherent organization.
+**Finding 2 — Semantic chunking over-fragments the CCC.** The semantic strategy produced 59% more chunks (11,751 vs ~7,500) by splitting paragraphs on topic shifts, but CCC paragraphs are already self-contained doctrinal units. The "topic shifts" it detects within paragraphs are often meaningful context (e.g., doctrine → scriptural citation) that should stay together. More chunks, worse retrieval.
+
+**Finding 3 — Generation metrics are nearly flat across strategies.** Token F1 ranges only 0.252–0.263 (~4% spread) despite P@K ranging 0.080–0.140 (75% spread). This suggests Mistral produces similar-quality paraphrased answers regardless of whether it received the "best" paragraphs or topically adjacent ones — the LLM is doing heavy paraphrasing work that masks retrieval differences downstream. Retrieval metrics are the more sensitive indicator of pipeline quality on this corpus.
+
+**Practical takeaway:** use sentence-level chunking. It has the best retrieval scores, the lowest chunk count (fastest ingestion and query), and comparable generation quality. Complexity for its own sake loses to structural fit with the corpus.
 
 ## Corpus
 
